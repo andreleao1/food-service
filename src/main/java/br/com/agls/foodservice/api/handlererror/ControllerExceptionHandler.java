@@ -2,6 +2,7 @@ package br.com.agls.foodservice.api.handlererror;
 
 import br.com.agls.foodservice.exceptions.ConstraintViolationException;
 import br.com.agls.foodservice.exceptions.DataBaseOperationException;
+import br.com.agls.foodservice.exceptions.EntityNotFoundException;
 import br.com.agls.foodservice.exceptions.InternalServerErrorException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -48,6 +49,20 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleConstraintViolationException (RuntimeException e, WebRequest request) {
 
         HttpStatus requestStatus = HttpStatus.UNPROCESSABLE_ENTITY;
+
+        ResponseError response = ResponseError.builder()
+                .timestamp(LocalDateTime.now())
+                .status(requestStatus.value())
+                .message(e.getMessage())
+                .build();
+
+        return handleExceptionInternal(e, response, new HttpHeaders(), requestStatus, request);
+    }
+
+    @ExceptionHandler(value = {EntityNotFoundException.class})
+    public ResponseEntity<Object> handleEntityNotFoundException (RuntimeException e, WebRequest request) {
+
+        HttpStatus requestStatus = HttpStatus.NOT_FOUND;
 
         ResponseError response = ResponseError.builder()
                 .timestamp(LocalDateTime.now())
