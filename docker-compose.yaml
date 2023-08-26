@@ -16,6 +16,7 @@ services:
     image: postgres:15
     volumes:
       - pgdata:/var/lib/postgres/data
+      - ./src/main/resources/db/migration:/usr/src/db/
     environment:
       POSTGRES_DB: "food-db"
       POSTGRES_PASSWORD: "password"
