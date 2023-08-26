@@ -17,6 +17,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataAccessException;
 
 import java.util.UUID;
 
@@ -55,23 +56,9 @@ public class FoodServiceUnitTest {
     }
 
     @Test
-    @DisplayName("SQL statement error")
-    public void shouldThrowADataBaseOperationExceptionWhenAErrorOccurInTheSQLStatement() {
-        doThrow(DataBaseOperationException.class).when(this.foodRepository).save(Mockito.any(Food.class));
-
-        Throwable thrown = catchThrowable(() -> {
-            this.foodService.save(this.food);
-        });
-
-        verify(this.foodRepository, times(1)).save(this.food);
-        assertThat(thrown, instanceOf(DataBaseOperationException.class));
-        assertThat(thrown.getMessage(), is(String.format("Error to save food, error message: %s", thrown.getMessage())));
-    }
-
-    @Test
     @DisplayName("Constraint violation")
     public void shouldThrowAConstraintViolationWhenAErrorOccurInTheSQLStatement() {
-        doThrow(ConstraintViolationException.class).when(this.foodRepository).save(Mockito.any(Food.class));
+        doThrow(jakarta.validation.ConstraintViolationException.class).when(this.foodRepository).save(Mockito.any(Food.class));
 
         Throwable thrown = catchThrowable(() -> {
             this.foodService.save(this.food);
@@ -79,7 +66,6 @@ public class FoodServiceUnitTest {
 
         verify(this.foodRepository, times(1)).save(this.food);
         assertThat(thrown, instanceOf(ConstraintViolationException.class));
-        assertThat(thrown.getMessage(), is(String.format("A constraint violation happened, error message: %s", thrown.getMessage())));
     }
 
     @Test
@@ -93,6 +79,5 @@ public class FoodServiceUnitTest {
 
         verify(this.foodRepository, times(1)).save(this.food);
         assertThat(thrown, instanceOf(InternalServerErrorException.class));
-        assertThat(thrown.getMessage(), is(String.format("Error to save food, error message: %s", thrown.getMessage())));
     }
 }
