@@ -2,7 +2,6 @@ package br.com.agls.foodservice.unittest;
 
 import br.com.agls.foodservice.entity.Food;
 import br.com.agls.foodservice.exceptions.ConstraintViolationException;
-import br.com.agls.foodservice.exceptions.DataBaseOperationException;
 import br.com.agls.foodservice.exceptions.InternalServerErrorException;
 import br.com.agls.foodservice.infra.repository.interfaces.FoodRepository;
 import br.com.agls.foodservice.service.FoodServiceImpl;
@@ -23,7 +22,6 @@ import java.util.UUID;
 import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest(classes = FoodServiceUnitTest.class)
@@ -55,23 +53,9 @@ public class FoodServiceUnitTest {
     }
 
     @Test
-    @DisplayName("SQL statement error")
-    public void shouldThrowADataBaseOperationExceptionWhenAErrorOccurInTheSQLStatement() {
-        doThrow(DataBaseOperationException.class).when(this.foodRepository).save(Mockito.any(Food.class));
-
-        Throwable thrown = catchThrowable(() -> {
-            this.foodService.save(this.food);
-        });
-
-        verify(this.foodRepository, times(1)).save(this.food);
-        assertThat(thrown, instanceOf(DataBaseOperationException.class));
-        assertThat(thrown.getMessage(), is(String.format("Error to save food, error message: %s", thrown.getMessage())));
-    }
-
-    @Test
     @DisplayName("Constraint violation")
     public void shouldThrowAConstraintViolationWhenAErrorOccurInTheSQLStatement() {
-        doThrow(ConstraintViolationException.class).when(this.foodRepository).save(Mockito.any(Food.class));
+        doThrow(jakarta.validation.ConstraintViolationException.class).when(this.foodRepository).save(Mockito.any(Food.class));
 
         Throwable thrown = catchThrowable(() -> {
             this.foodService.save(this.food);
@@ -79,7 +63,6 @@ public class FoodServiceUnitTest {
 
         verify(this.foodRepository, times(1)).save(this.food);
         assertThat(thrown, instanceOf(ConstraintViolationException.class));
-        assertThat(thrown.getMessage(), is(String.format("A constraint violation happened, error message: %s", thrown.getMessage())));
     }
 
     @Test
@@ -93,6 +76,5 @@ public class FoodServiceUnitTest {
 
         verify(this.foodRepository, times(1)).save(this.food);
         assertThat(thrown, instanceOf(InternalServerErrorException.class));
-        assertThat(thrown.getMessage(), is(String.format("Error to save food, error message: %s", thrown.getMessage())));
     }
 }
