@@ -1,14 +1,12 @@
 package br.com.agls.foodservice.service;
 
 import br.com.agls.foodservice.entity.Food;
-import br.com.agls.foodservice.exceptions.DataBaseOperationException;
 import br.com.agls.foodservice.exceptions.InternalServerErrorException;
 import br.com.agls.foodservice.infra.repository.interfaces.FoodRepository;
 import br.com.agls.foodservice.service.interfaces.FoodService;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 @Slf4j

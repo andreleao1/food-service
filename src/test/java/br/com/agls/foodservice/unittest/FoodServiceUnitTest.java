@@ -2,7 +2,6 @@ package br.com.agls.foodservice.unittest;
 
 import br.com.agls.foodservice.entity.Food;
 import br.com.agls.foodservice.exceptions.ConstraintViolationException;
-import br.com.agls.foodservice.exceptions.DataBaseOperationException;
 import br.com.agls.foodservice.exceptions.InternalServerErrorException;
 import br.com.agls.foodservice.infra.repository.interfaces.FoodRepository;
 import br.com.agls.foodservice.service.FoodServiceImpl;
@@ -17,14 +16,12 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataAccessException;
 
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest(classes = FoodServiceUnitTest.class)
