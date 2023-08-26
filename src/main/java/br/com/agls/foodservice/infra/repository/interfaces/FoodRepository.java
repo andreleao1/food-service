@@ -4,4 +4,6 @@ import br.com.agls.foodservice.entity.Food;
 
 public interface FoodRepository {
     void save(Food food);
+
+    Food findById(String id);
 }
