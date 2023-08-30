@@ -15,7 +15,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=password
       - SPRING_CACHE_TYPE=redis
-      - SPRING_REDIS_HOST=redis
+      - SPRING_DATA_REDIS_HOST=redis
       - SPRING_REDIS_PORT=6379
       - REDIS_TTL_VALUE=10
       - DEBUG=false
